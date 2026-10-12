@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="AIBusinessSupport.API/AIBusinessSupport.API.csproj" />
+  <Project Path="AIBusinessSupport.AppHost/AIBusinessSupport.AppHost.csproj" />
+  <Project Path="AIBusinessSupport.ServiceDefaults/AIBusinessSupport.ServiceDefaults.csproj" />
+</Solution>

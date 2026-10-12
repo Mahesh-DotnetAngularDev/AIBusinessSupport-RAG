@@ -1,0 +1,177 @@
+<div class="app-shell">
+  <aside class="sidebar" aria-label="Workspace navigation">
+    <a class="brand" href="/" aria-label="Business Support home">
+      <span class="brand-mark" aria-hidden="true">
+        <span></span><span></span><span></span>
+      </span>
+      <span class="brand-name">Northstar<span>Business support</span></span>
+    </a>
+
+    <button class="new-chat-button" type="button" (click)="startNewChat()" [disabled]="isSending">
+      <span class="plus-icon" aria-hidden="true">+</span>
+      <span>New conversation</span>
+    </button>
+
+   <div class="navigation-label">WORKSPACE</div>
+
+<div class="conversation-item" aria-current="page">
+  <span class="conversation-dot" aria-hidden="true"></span>
+  <span>AI assistant</span>
+  <span class="conversation-more" aria-hidden="true">...</span>
+</div>
+
+<div class="navigation-label knowledge-heading">KNOWLEDGE BASE</div>
+
+<div class="knowledge-list">
+  @if (isLoadingDocuments) {
+    <p class="knowledge-empty">Loading documents...</p>
+  } @else if (documents.length === 0) {
+    <p class="knowledge-empty">No documents uploaded yet.</p>
+  } @else {
+    @for (document of documents; track document.documentName) {
+      <div class="knowledge-document">
+  <span class="pdf-icon" aria-hidden="true">PDF</span>
+
+  <div class="knowledge-document-info">
+    <span class="knowledge-document-name"
+          [title]="document.documentName">
+      {{ document.documentName }}
+    </span>
+    <small>{{ document.chunkCount }} chunks</small>
+  </div>
+
+  <button
+    type="button"
+    class="delete-document-button"
+    aria-label="Delete document"
+    title="Delete document"
+    [disabled]="isDeletingDocument === document.documentName"
+    (click)="deleteDocument(document.documentName)">
+    {{ isDeletingDocument === document.documentName ? '...' : '×' }}
+  </button>
+</div>
+    }
+  }
+</div>
+
+    <div class="sidebar-spacer"></div>
+
+    <div class="account">
+      <span class="account-avatar" aria-hidden="true">BS</span>
+      <span class="account-copy"><strong>Business Support</strong><small>Support workspace</small></span>
+      <span class="account-menu" aria-hidden="true">···</span>
+    </div>
+  </aside>
+
+  <main class="main-pane">
+    <header class="topbar">
+      <div class="breadcrumbs"><span>Workspace</span><span class="breadcrumb-divider">/</span><strong>AI assistant</strong></div>
+      <div class="assistant-badge"><span class="status-dot"></span> AI assistant</div>
+    </header>
+
+    <section class="chat-layout" aria-label="AI assistant conversation">
+      <div #conversation class="conversation-viewport" role="log" aria-live="polite" aria-relevant="additions text">
+        @if (messages.length === 0) {
+          <div class="welcome-content">
+            <div class="welcome-mark" aria-hidden="true">
+              <span class="welcome-spark"></span>
+              <span class="welcome-orbit"></span>
+            </div>
+            <p class="eyebrow">YOUR BUSINESS, IN FOCUS</p>
+            <h1>How can I help<br>you today?</h1>
+            <p class="welcome-copy">Ask about orders, customers, or day-to-day support.</p>
+
+            <div class="suggestion-list" aria-label="Suggested messages">
+              @for (suggestion of suggestions; track suggestion) {
+                <button type="button" class="suggestion" (click)="useSuggestion(suggestion)">
+                  <span>{{ suggestion }}</span>
+                  <span class="suggestion-arrow" aria-hidden="true">↗</span>
+                </button>
+              }
+            </div>
+          </div>
+        } @else {
+          <div class="message-list">
+            @for (message of messages; track $index) {
+              <article class="message-row" [class.from-user]="message.role === 'user'">
+                <div class="message-avatar" [class.user-avatar]="message.role === 'user'" aria-hidden="true">
+                  {{ message.role === 'user' ? 'Y' : 'N' }}
+                </div>
+                <div class="message-content">
+                  <div class="message-author">{{ message.role === 'user' ? 'You' : 'Northstar' }}</div>
+                  @if (message.role === 'assistant') {
+                    <div class="assistant-markdown">
+                      <markdown [data]="message.text"></markdown>
+                    </div>
+                  } @else {
+                    <p>{{ message.text }}</p>
+                  }
+                </div>
+              </article>
+            }
+
+            @if (isSending) {
+              <div class="message-row" aria-label="Assistant is responding">
+                <div class="message-avatar" aria-hidden="true">N</div>
+                <div class="typing-indicator"><span></span><span></span><span></span></div>
+              </div>
+            }
+          </div>
+        }
+      </div>
+
+      <form class="composer" (ngSubmit)="sendMessage()">
+  <label class="visually-hidden" for="message-input">
+    Your message
+  </label>
+
+  <textarea
+    id="message-input"
+    name="message"
+    [(ngModel)]="draft"
+    (keydown)="onComposerKeydown($event)"
+    [disabled]="isSending || isUploadingPdf"
+    maxlength="2000"
+    rows="2"
+    placeholder="Ask a question about your business..."
+    autocomplete="off"
+  ></textarea>
+
+  <div class="composer-controls">
+    <label class="upload-button" for="pdf-upload">
+      {{ isUploadingPdf ? 'Uploading PDF...' : '＋ Upload PDF' }}
+    </label>
+
+    <input
+      id="pdf-upload"
+      type="file"
+      accept=".pdf,application/pdf"
+      (change)="onPdfSelected($event)"
+      [disabled]="isUploadingPdf || isSending"
+      hidden
+    />
+
+    <span class="composer-hint">
+      Enter to send <span>·</span> Shift + Enter for a new line
+    </span>
+
+    <span class="composer-count">{{ draft.length }} / 2000</span>
+
+    <button
+      class="send-button"
+      type="submit"
+      aria-label="Send message"
+      [disabled]="!draft.trim() || isSending || isUploadingPdf"
+    >
+      <span aria-hidden="true">↑</span>
+    </button>
+  </div>
+</form>
+
+@if (uploadMessage) {
+  <p class="upload-status" role="status">{{ uploadMessage }}</p>
+}
+      <p class="disclaimer">AI responses can be inaccurate. Verify important business details.</p>
+    </section>
+  </main>
+</div>

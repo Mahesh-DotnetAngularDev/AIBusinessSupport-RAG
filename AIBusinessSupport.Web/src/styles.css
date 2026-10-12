@@ -1,0 +1,125 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Serif+Display&display=swap');
+
+:root {
+	color-scheme: light;
+	font-family: 'DM Sans', 'Segoe UI', sans-serif;
+	color: #24342e;
+	background: #f3f5f1;
+	font-synthesis: none;
+	text-rendering: optimizeLegibility;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+* {
+	box-sizing: border-box;
+}
+
+html,
+body {
+	width: 100%;
+	min-width: 320px;
+	min-height: 100%;
+	margin: 0;
+}
+
+body {
+	min-height: 100vh;
+}
+
+button,
+textarea {
+	font: inherit;
+}
+
+button {
+	color: inherit;
+}
+
+::selection {
+	color: #17382e;
+	background: #d4e8dc;
+}
+
+.assistant-markdown {
+	min-width: 0;
+	overflow-x: auto;
+	color: #34443b;
+	font-size: 13px;
+	line-height: 1.7;
+	overflow-wrap: anywhere;
+}
+
+.assistant-markdown markdown {
+	display: block;
+}
+
+.assistant-markdown p {
+	margin: 0 0 0.8em;
+}
+
+.assistant-markdown p:last-child {
+	margin-bottom: 0;
+}
+
+.assistant-markdown ul,
+.assistant-markdown ol {
+	margin: 0.55em 0;
+	padding-left: 1.5em;
+}
+
+.assistant-markdown li + li {
+	margin-top: 0.25em;
+}
+
+.assistant-markdown table {
+	display: block;
+	width: max-content;
+	max-width: 100%;
+	margin: 0.85em 0;
+	overflow-x: auto;
+	border-collapse: collapse;
+	font-size: 12px;
+	white-space: nowrap;
+}
+
+.assistant-markdown th,
+.assistant-markdown td {
+	padding: 7px 10px;
+	border: 1px solid #d9e2d8;
+	text-align: left;
+}
+
+.assistant-markdown th {
+	color: #344b3d;
+	background: #e8eee6;
+	font-weight: 700;
+}
+
+.assistant-markdown code {
+	padding: 1px 4px;
+	border-radius: 3px;
+	color: #724c38;
+	background: #eee9e1;
+	font-family: Consolas, 'Courier New', monospace;
+	font-size: 0.9em;
+}
+
+.assistant-markdown pre {
+	max-width: 100%;
+	padding: 12px;
+	overflow-x: auto;
+	border-radius: 6px;
+	background: #e9eee7;
+}
+
+.assistant-markdown pre code {
+	padding: 0;
+	background: transparent;
+}
+
+.assistant-markdown a {
+	color: #426b53;
+	text-decoration-thickness: 1px;
+	text-underline-offset: 2px;
+}
